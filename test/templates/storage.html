@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stored Sessions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .session {
+            background: #e9ecef;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .session h2 {
+            margin-top: 0;
+        }
+        .bag-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .bag-item {
+            background: #d4edda;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stored Sessions</h1>
+        <div id="session-list">Loading sessions...</div>
+    </div>
+
+    <script>
+        // Fetch and display saved sessions with bag details
+        function fetchSessions() {
+            fetch('/get-sessions')
+                .then(response => response.json())
+                .then(sessions => {
+                    const sessionList = document.getElementById('session-list');
+                    sessionList.innerHTML = ''; // Clear previous sessions
+                    sessions.forEach(session => {
+                        const sessionDiv = document.createElement('div');
+                        sessionDiv.className = 'session';
+                        
+                        // Display session totals
+                        sessionDiv.innerHTML = `
+                            <h2>Session ${session.session_id}</h2>
+                            <p>Total Bags: ${session.total_bags}</p>
+                            <p>Total Weight: ${session.total_weight} kg</p>
+                            <h3>Bag Details:</h3>
+                        `;
+
+                        // Display each bag in the session
+                        const bagList = document.createElement('ul');
+                        bagList.className = 'bag-list';
+                        session.measurements.forEach(bag => {
+                            const bagItem = document.createElement('li');
+                            bagItem.className = 'bag-item';
+                            bagItem.textContent = `${bag.bag_nr}: ${bag.weight} kg`;
+                            bagList.appendChild(bagItem);
+                        });
+
+                        sessionDiv.appendChild(bagList);
+                        sessionList.appendChild(sessionDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching sessions:', error));
+        }
+
+        fetchSessions();  // Load sessions on page load
+    </script>
+</body>
+</html>

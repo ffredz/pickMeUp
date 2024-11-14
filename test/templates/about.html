@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/070d4de58a.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>about</title>
+    <script>
+        function scrollFunction() {
+            document.getElementById('neste-side').scrollIntoView({
+            behavior: 'smooth'
+          });
+          } 
+    </script>
+    <style>
+        body{
+
+            background-image:url("/static/backgroundimg.jpg");
+            background-size:cover;
+            background-repeat:no-repeat;
+            background-position:center center;
+            background-attachment:fixed;
+        }
+        .front{
+            
+            
+            min-width:100%;
+            min-height:100vh;
+        }
+        .navbar{
+            
+            display:flex;
+            justify-content:space-between;
+            top:0;
+            background-color:rgba(6,134,143,.5)
+        }
+        .navbar:hover{
+            background-color:rgba(6,134,143);
+            
+        }
+        a{
+            text-decoration:none;
+        }
+        button{
+            background-color: transparent;
+            border:none;
+        }
+        button:hover{
+            cursor:pointer;
+        }
+        .logo a button{
+            font-size:3rem;
+            padding-left:2rem;
+            padding-top:1rem;
+            padding-bottom:1rem;
+        }
+        .liste{
+            display:flex;
+            
+            
+            margin-right:2rem;
+            
+        }
+        .liste a button{
+             
+            height:100%;
+            padding-left:1.5em;
+            padding-right:1.5em;
+            
+            
+        }
+        
+        .liste a button:hover{
+            background-color:rgba(240,248,255,.6);
+        }
+        .end{
+            min-height:100vh;
+            min-width:100vw;
+            background-color:rgba(255, 255, 255, 0.5);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        .endgrid{
+            display:grid;
+            
+            grid-template-columns: 50% 50%;
+        }
+        
+        .velkommen{
+            
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        .yo{
+            border-radius:3em;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            padding-top:1em;
+            margin-top:7em;
+            padding-left:2em;
+            padding-right:2em;
+            padding-bottom:1em;
+            background-color:rgba(247, 246, 246, 0.7)
+        }
+        #yoelementTop{
+            display:flex;
+            justify-content:center;
+            margin-bottom:0;
+           
+        }
+        #yoelementTop img{
+            width:15rem;
+        }
+        
+        #yoelementMid{
+            padding-top:0;
+            border:solid;
+        }
+        #yoelementMid, #yoelementnestnederst{
+            font-size:1.5rem;
+            padding:1rem;
+        }
+        i{
+            padding:1rem;
+            font-size:3rem;
+            
+        }
+        #nedknapp:hover{
+            background-color:rgba(6,134,143,.5)
+        }
+        img{
+            width:100%;
+            height:100%;
+        }
+        #bilde{
+            background-image: url("/static/soppel.jpg");
+            background-size:cover;
+            background-repeat:no-repeat;
+            background-position:center center;
+            border-top-left-radius:0;
+            border-bottom-left-radius:0;
+        }
+        .endelement{
+            width:20rem;
+            background-color:white;
+            border-radius:1rem;
+            min-height:30rem;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+        
+        }
+        #endelementTekst{
+            border-top-right-radius:0;
+            border-bottom-right-radius:0;
+        }
+        .endelement p{
+            
+            padding:2rem;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="front">
+        
+        <nav class="navbar">
+            <div class="logo">
+                <a><button>pickMeUp</button></a>
+            </div> 
+            
+            <div class="liste">
+                <a href="/"><button >Home</button></a>
+                <a href="/about"><button >About</button></a>
+                <a href="/storage"><button>Storage</button></a>
+            </div>
+
+        </nav>
+        <div class="velkommen">
+            <div class="yo">
+                <div class="yoelement" id="yoelementTop">
+                    <img src="/static/pickMeUpTransparent.png">
+                </div>
+                <div class="yoelement" id="yoelementMid">
+                    Changing the world one bag at a time.
+                    
+                </div>
+                <div class="yoelement" id="yoelementnestnederst">Our vision:</div>
+                <div class="yoelement" id="yoelementNed">
+                    <button id="nedknapp" onclick="scrollFunction()"><i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="end" id="neste-side">
+        <div class="endgrid">
+            <div class="endelement" id="endelementTekst"><p>Her kan vi ha en fin liten tekst og en eller anna bilde</p></div>
+            <div class="endelement" id="bilde"></div>
+        </div>
+    </div>
+</body>
+</html>

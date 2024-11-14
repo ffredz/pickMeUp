@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 Sensor Data Logger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            background-image:url("/static/index-background.jpg");
+            background-attachment:fixed;
+            background-position:center;
+            background-size:cover;
+        }
+        h1 {
+            text-align: center;
+            color: black;
+        }
+        .container {
+
+            width: 90%;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(6,134,143,.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button.remove {
+            background: #dc3545;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #latest-measurement,
+        #stored-measurements {
+            margin-top: 20px;
+        }
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        li {
+            background: #e9ecef;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        * {
+            text-decoration: none;
+        }
+        .navbar {
+            background: #06868F;
+            font-family: calibri;
+            padding-right: 15px;
+            padding-left: 15px;
+            width:100vw
+        }
+        .navdiv {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo a {
+            font-size: 35px;
+            font-weight: 600;
+            color: white;
+        }
+        .navdiv li {
+            list-style: none;
+            display: inline-block;
+        }
+        li a {
+            color: grey;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 25px;
+        }
+        button a {
+            color: black;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .header-button {
+            
+            background: white;
+            margin-right: 2rem;
+            
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="/">pickMeUp</a> </div>
+            <ul>
+                <button class="header-button"><a href="/">Home</a></button>
+                <button class="header-button"><a href="/about">About</a></button>
+                <button class="header-button"><a href="/storage">Storage</a></button>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>pickMeUp session logger</h1>
+        <h2>Latest Measurement:</h2>
+        <p id="latest-measurement">No data</p>
+
+        <h2>Stored Measurements:</h2>
+        <ul id="stored-measurements"></ul>
+
+        <button onclick="clearData()">Clear Stored Data</button>
+        <button class="remove" onclick="removeLatest()">Remove Latest</button>
+        <!-- Save Session Button -->
+        <button onclick="saveSession()">Save Session</button>
+    </div>
+
+    <script>
+        // Function to update the displayed latest measurement
+        function fetchLatestMeasurement() {
+            fetch('/get-data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the latest measurement display
+                    document.getElementById('latest-measurement').textContent = data.latest_measurement.weight + ' kg';
+
+                    // Update the stored measurements list
+                    const list = document.getElementById('stored-measurements');
+                    list.innerHTML = ''; // Clear previous entries
+                    data.stored_measurements.forEach(entry => {
+                        const li = document.createElement('li');
+                        li.textContent = `${entry.bag_nr}: ${entry.weight} kg`;
+                        list.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Poll the server for updates every few seconds
+        setInterval(fetchLatestMeasurement, 3000);
+        fetchLatestMeasurement();
+
+        // Function to clear stored data on button click
+        function clearData() {
+            fetch('/clear-data', {
+                method: 'POST'
+            }).then(() => fetchLatestMeasurement());
+        }
+
+        // Function to remove the latest stored data entry
+        function removeLatest() {
+            fetch('/remove-latest', {
+                method: 'POST'
+            }).then(() => fetchLatestMeasurement());
+        }
+
+        // Function to save the current session
+        function saveSession() {
+            fetch('/save-session', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Session saved successfully!');
+                } else {
+                    alert('Failed to save session.');
+                }
+            })
+            .catch(error => console.error('Error saving session:', error));
+        }
+    </script>
+</body>
+</html>
